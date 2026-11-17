@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calculadora Reed-Solomon</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>Calculadora Reed-Solomon</h1>
+    <p class="subtitle">
+      Herramienta didáctica de codificación y decodificación Reed-Solomon —
+      Trabajo Final Integrado, Comunicación de Datos.
+    </p>
+  </header>
+
+  <main>
+    <section id="config-section" class="panel">
+      <h2>1. Configuración del código</h2>
+      <div class="field-row">
+        <label>
+          Tamaño de símbolo (m, bits)
+          <select id="mSelect"></select>
+        </label>
+        <label>
+          Símbolos de mensaje (k)
+          <input type="number" id="kInput" min="1" value="3" />
+        </label>
+        <label>
+          Capacidad de corrección (t)
+          <input type="number" id="tInput" min="1" value="2" />
+        </label>
+      </div>
+      <p id="configSummary" class="summary"></p>
+      <p id="configError" class="error" role="alert"></p>
+      <button id="loadExampleBtn" type="button" class="secondary">
+        Cargar ejemplo del anteproyecto (RS(7,3) sobre GF(16))
+      </button>
+    </section>
+
+    <section id="message-section" class="panel">
+      <h2>2. Mensaje y codificación</h2>
+      <label for="messageInput">
+        Símbolos del mensaje, separados por coma (enteros entre 0 y 2<sup>m</sup> &minus; 1)
+      </label>
+      <div class="field-row">
+        <input type="text" id="messageInput" placeholder="Ej: 12,6,3" />
+        <button id="encodeBtn" type="button">Codificar</button>
+      </div>
+      <p id="encodeError" class="error" role="alert"></p>
+
+      <div id="encodeResults" class="results hidden">
+        <details>
+          <summary>Tabla de logaritmos de GF(2<sup>m</sup>)</summary>
+          <div id="logTableContainer" class="scroll-table"></div>
+        </details>
+
+        <div class="result-block">
+          <h3>Polinomio generador G(x)</h3>
+          <p id="generatorOutput" class="mono"></p>
+        </div>
+
+        <div class="result-block">
+          <h3>Codeword transmitido T(x)</h3>
+          <div id="codewordOutput" class="symbol-row"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="channel-section" class="panel hidden">
+      <h2>3. Canal: simular errores</h2>
+      <p>
+        Modificá cualquier símbolo del codeword para simular un error de
+        transmisión. Este código corrige hasta
+        <strong>t = <span id="tDisplay"></span></strong> símbolos erróneos por bloque.
+      </p>
+      <div id="receivedSymbols" class="symbol-row editable"></div>
+      <button id="decodeBtn" type="button">Decodificar</button>
+    </section>
+
+    <section id="decode-section" class="panel hidden">
+      <h2>4. Decodificación</h2>
+
+      <div class="result-block">
+        <h3>Síndromes</h3>
+        <p id="syndromesOutput" class="mono"></p>
+      </div>
+
+      <div class="result-block">
+        <h3>Polinomio localizador &Lambda;(x)</h3>
+        <p id="locatorOutput" class="mono"></p>
+      </div>
+
+      <div class="result-block">
+        <h3>Errores detectados</h3>
+        <table id="errorsTable">
+          <thead>
+            <tr><th>Posición (x<sup>i</sup>)</th><th>Magnitud</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="result-block">
+        <h3>Codeword corregido</h3>
+        <div id="correctedOutput" class="symbol-row"></div>
+      </div>
+
+      <div id="decodeStatus" class="status" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      Cátedra Comunicación de Datos — UTN. Calculadora Reed-Solomon
+      desarrollada como Trabajo Final Integrado.
+    </p>
+  </footer>
+
+  <script src="js/gf.js"></script>
+  <script src="js/poly.js"></script>
+  <script src="js/rsEncoder.js"></script>
+  <script src="js/rsDecoder.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
